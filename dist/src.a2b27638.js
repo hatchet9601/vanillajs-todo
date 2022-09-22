@@ -208,8 +208,16 @@ var onClickAdd = function onClickAdd() {
 
   var completeButton = document.createElement("button");
   completeButton.innerText = "完了";
+  completeButton.addEventListener("click", function () {
+    alert("完了");
+  });
   var deleteButton = document.createElement("button");
-  deleteButton.innerText = "削除"; //階層設定
+  deleteButton.innerText = "削除";
+  deleteButton.addEventListener("click", function () {
+    alert("削除");
+    var deleteTarget = deleteButton.parentNode.parentNode;
+    document.getElementById("incomplete-list").removeChild(deleteTarget);
+  }); //階層設定
 
   li.appendChild(div);
   div.appendChild(p);
@@ -249,7 +257,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42145" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39993" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
