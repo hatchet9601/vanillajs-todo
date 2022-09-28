@@ -196,27 +196,59 @@ require("./styles.css");
 
 var onClickAdd = function onClickAdd() {
   var inputText = document.getElementById("add-text").value;
-  document.getElementById("add-text").value = ""; //li生成
+  document.getElementById("add-text").value = "";
+  createIncompleteList(inputText);
+};
 
+var deleteFromIncompleteList = function deleteFromIncompleteList(target) {
+  document.getElementById("incomplete-list").removeChild(target);
+};
+
+var createIncompleteList = function createIncompleteList(text) {
+  //li生成
   var li = document.createElement("li"); //div生成
 
-  var div = document.createElement("li");
+  var div = document.createElement("div");
   div.className = "list-row"; //p生成
 
   var p = document.createElement("p");
-  p.innerText = inputText; //button生成
+  p.innerText = text; //button生成
 
   var completeButton = document.createElement("button");
   completeButton.innerText = "完了";
   completeButton.addEventListener("click", function () {
-    alert("完了");
+    //削除
+    deleteFromIncompleteList(completeButton.parentNode.parentNode); //完了リストに追加
+
+    var addTarget = completeButton.parentNode.parentNode; //TODO内容テキストを取得
+    //firstElementChildを使用すると汎用性が薄まるけど、本質じゃないので今回は許容
+
+    var text = addTarget.firstElementChild.firstElementChild.innerText; // //div以下を初期化
+
+    addTarget.textContent = null; // //タグの生成
+
+    var div = document.createElement("div");
+    div.className = "list-row";
+    var p = document.createElement("p");
+    p.innerText = text; //buttonタグの生成
+
+    var backButton = document.createElement("button");
+    backButton.addEventListener("click", function () {
+      var deleteTarget = backButton.parentNode.parentNode;
+      document.getElementById("complete-list").removeChild(deleteTarget);
+      var text = backButton.parentNode.firstElementChild.innerText;
+      createIncompleteList(text);
+    });
+    backButton.innerText = "戻す";
+    addTarget.appendChild(div);
+    div.appendChild(p);
+    div.appendChild(backButton);
+    document.getElementById("complete-list").appendChild(addTarget);
   });
   var deleteButton = document.createElement("button");
   deleteButton.innerText = "削除";
   deleteButton.addEventListener("click", function () {
-    alert("削除");
-    var deleteTarget = deleteButton.parentNode.parentNode;
-    document.getElementById("incomplete-list").removeChild(deleteTarget);
+    deleteFromIncompleteList(deleteButton.parentNode.parentNode);
   }); //階層設定
 
   li.appendChild(div);
@@ -257,7 +289,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39993" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33831" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
